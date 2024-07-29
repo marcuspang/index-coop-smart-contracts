@@ -1,15 +1,26 @@
 import { ethers } from "hardhat";
 import {
   BasicIssuanceModule__factory,
+  ERC20__factory,
   SetTokenCreator__factory,
   StreamingFeeModule__factory,
   TradeModule__factory,
 } from "../typechain";
 import { ether } from "../utils/common";
 import { ADDRESS_ZERO } from "../utils/constants";
+import { parseUnits } from "ethers/lib/utils";
+import { BigNumber } from "ethers";
 
-const BNB = "0xB8c77482e45F1F44dE1745F52C74426C631bDD52";
-const USDC = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
+const RNDR = "0x6de037ef9ad2725eb40118bb1702ebb27e4aeb24"; // 20%
+const wTAO = "0x77e06c9eccf2e797fd462a92b6d7642ef85b0a44"; // 20%
+const ARKM = "0x6e2a43be0b1d33b726f0ca3b8de60b3482b8b050"; // 15%
+const ASTRA = "0x0aA8A7D1fB4c64B3b1DcEa9A7ADe81C59C25b95b"; // 15%
+const ZIG = "0xb2617246d0c6c0087f18703d576831899ca94f01"; // 10%
+const PAAL = "0x14feE680690900BA0ccCfC76AD70Fd1b95D10e16"; // 10%
+const BLENDR = "0x84018071282d4B2996272659D9C01cB08DD7327F"; // 10%
+
+const tokens = [RNDR, wTAO, ARKM, ASTRA, ZIG, PAAL, BLENDR];
+const weights = [0.2, 0.2, 0.15, 0.15, 0.1, 0.1, 0.1];
 
 // Update these addresses
 const SET_TOKEN_CREATOR_ADDRESS = "0x55E36d760975158B17Df31a3F60a41fD3a452D35";
@@ -33,9 +44,19 @@ async function main() {
   const tradeModule = TradeModule__factory.connect(TRADE_MODULE_ADDRESS, signer);
   const setTokenCreator = SetTokenCreator__factory.connect(SET_TOKEN_CREATOR_ADDRESS, signer);
 
+  const actualWeights = Array.from(Array(tokens.length).keys()).map((i) => BigNumber.from(0));
+  for await (const [index, weight] of weights.entries()) {
+    const decimals = await ERC20__factory.connect(tokens[index], signer).decimals();
+    actualWeights[index] = parseUnits(weight.toString(), decimals);
+  }
+  console.log(
+    "Deploying tokens with weights:",
+    actualWeights.map((w) => w.toString()),
+  );
+
   const tx = await setTokenCreator.create(
-    [BNB, USDC],
-    [ether(1), ether(1)],
+    tokens,
+    actualWeights,
     [BASIC_ISSUANCE_MODULE_ADDRESS, STREAMING_FEE_MODULE_ADDRESS, TRADE_MODULE_ADDRESS],
     signer.address,
     "My SetToken",
