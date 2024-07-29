@@ -45,12 +45,12 @@ import { WrapAdapterMock__factory } from "../../typechain/factories/WrapAdapterM
 import { WrappedfCashMock__factory } from "../../typechain/factories/WrappedfCashMock__factory";
 import { WrappedfCashFactoryMock__factory } from "../../typechain/factories/WrappedfCashFactoryMock__factory";
 import { ZeroExExchangeProxyMock__factory  } from "../../typechain/factories/ZeroExExchangeProxyMock__factory";
-import { AaveV2LendingPoolMock__factory } from "@typechain/factories/AaveV2LendingPoolMock__factory";
-import { AaveV2LendingPoolMock } from "@typechain/AaveV2LendingPoolMock";
-import { FlashMintLeveragedCompMock } from "@typechain/FlashMintLeveragedCompMock";
-import { FlashMintLeveragedCompMock__factory } from "@typechain/factories/FlashMintLeveragedCompMock__factory";
-import { OptimisticOracleV3Mock__factory } from "@typechain/factories/OptimisticOracleV3Mock__factory";
-import { PrtStakingPoolMock__factory } from "@typechain/factories/PrtStakingPoolMock__factory";
+import { AaveV2LendingPoolMock__factory } from "../../typechain/factories/AaveV2LendingPoolMock__factory";
+import { AaveV2LendingPoolMock } from "../../typechain/AaveV2LendingPoolMock";
+import { FlashMintLeveragedCompMock } from "../../typechain/FlashMintLeveragedCompMock";
+import { FlashMintLeveragedCompMock__factory } from "../../typechain/factories/FlashMintLeveragedCompMock__factory";
+import { OptimisticOracleV3Mock__factory } from "../../typechain/factories/OptimisticOracleV3Mock__factory";
+import { PrtStakingPoolMock__factory } from "../../typechain/factories/PrtStakingPoolMock__factory";
 
 export default class DeployMocks {
   private _deployerSigner: Signer;
