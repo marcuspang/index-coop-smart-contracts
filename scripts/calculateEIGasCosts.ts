@@ -17,7 +17,7 @@ async function getQuote(params: any, retryCount: number = 0): Promise<any> {
     const response = await axios(url);
     return response.data;
   } catch (error) {
-    if (RETRY_STATUSES.includes(error.response?.status) && retryCount < MAX_RETRIES) {
+    if (RETRY_STATUSES.includes((error as any).response?.status) && retryCount < MAX_RETRIES) {
       await sleep(1000);
       return await getQuote(params, retryCount + 1);
     } else {

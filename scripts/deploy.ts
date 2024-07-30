@@ -29,7 +29,7 @@ async function main() {
 
   await controller.initialize(
     [setTokenCreator.address],
-    [basicIssuanceModule.address, streamingFeeModule.address, tradeModule.address],
+    [streamingFeeModule.address, basicIssuanceModule.address, tradeModule.address],
     [],
     [],
   );

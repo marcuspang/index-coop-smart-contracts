@@ -12,9 +12,13 @@
     "baseUrl": ".",
     "moduleResolution": "node",
     "paths": {
-        "@utils/*": ["./utils/*"],
-        "@typechain/*": ["./typechain/*"],
-    }
+      "@utils/*": [
+        "./utils/*"
+      ],
+      "@typechain/*": [
+        "./typechain/*"
+      ],
+    },
   },
   "include": [
     "./test/**/*.ts",
