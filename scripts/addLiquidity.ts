@@ -58,6 +58,17 @@ async function addLiquidityV2(
   const uniswapV2Factory = UniswapV2Factory__factory.connect(UNISWAP_V2_FACTORY_ADDRESS, signer);
   const uniswapV2Router02 = UniswapV2Router02__factory.connect(UNISWAP_V2_ROUTER_ADDRESS, signer);
 
+  const balance = await ethers.provider.getBalance(signer.address);
+  if (balance.lt(ethToAdd)) {
+    console.log("Not enough ETH to add liquidity", balance);
+    return;
+  }
+  const tokenBalance = await setToken.balanceOf(signer.address);
+  if (tokenBalance.lt(amountToAdd)) {
+    console.log("Not enough tokens to add liquidity", tokenBalance);
+    return;
+  }
+
   await setToken.approve(UNISWAP_V2_ROUTER_ADDRESS, amountToAdd);
   console.log("Approved amountToAdd:", amountToAdd.toString());
 
@@ -90,6 +101,17 @@ async function addLiquidityV3(
     UNISWAP_V3_POOL_FACTORY_CONTRACT_ADDRESS,
     signer,
   );
+
+  const balance = await ethers.provider.getBalance(signer.address);
+  if (balance.lt(ethAmount)) {
+    console.log("Not enough ETH to add liquidity", balance);
+    return;
+  }
+  const tokenBalance = await setToken.balanceOf(signer.address);
+  if (tokenBalance.lt(setTokenAmount)) {
+    console.log("Not enough tokens to add liquidity", tokenBalance);
+    return;
+  }
 
   const chainId = await signer.getChainId();
   const token0 = new Token(
