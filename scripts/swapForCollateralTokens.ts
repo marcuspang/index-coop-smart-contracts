@@ -3,8 +3,8 @@ import { BasicIssuanceModule__factory, ERC20__factory, SetToken__factory } from 
 import { ether } from "../utils/common";
 
 // Update these addresses
-const BASIC_ISSUANCE_MODULE_ADDRESS = "0xc7B78A62472d110b6368E6564751Eb7F6D6c69e9";
-const SET_TOKEN_ADDRESS = "0xeA5a5C9E7074Eda371A1E93171C5bf0659772913";
+const BASIC_ISSUANCE_MODULE_ADDRESS = "0xA1c8c28dcc714570EF038496D19Fdac138491f7f";
+const SET_TOKEN_ADDRESS = "0x575bE173859d08D0f1CceB7Ea451eA41D4839f8C";
 
 async function main() {
   const [signer] = await ethers.getSigners();
@@ -19,14 +19,22 @@ async function main() {
 
   const positions = await setToken.getPositions();
 
+  const amountToIssue = ether(0.1);
+
   // approve collateral tokens to be used for issuance of set token
   for await (const position of positions) {
     const erc20 = ERC20__factory.connect(position.component, signer);
-    await erc20.approve(basicIssuanceModule.address, ether(100));
+    const erc20Amount = amountToIssue.div(ether(1)).mul(position.unit);
+    const currentBalance = await erc20.balanceOf(signer.address);
+    if (currentBalance.lt(erc20Amount)) {
+      console.log("Not enough balance to approve:", erc20Amount);
+      return;
+    }
+    await erc20.approve(basicIssuanceModule.address, erc20Amount);
     console.log(position.component, " Balance:", await erc20.balanceOf(signer.address));
   }
 
-  await basicIssuanceModule.issue(SET_TOKEN_ADDRESS, ether(0.1), signer.address);
+  await basicIssuanceModule.issue(SET_TOKEN_ADDRESS, amountToIssue, signer.address);
   const newBalance = await setToken.balanceOf(signer.address);
   console.log("SetToken minted tokens to:", signer.address, "current balance:", newBalance);
 }

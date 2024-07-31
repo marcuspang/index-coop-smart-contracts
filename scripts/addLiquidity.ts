@@ -45,8 +45,8 @@ async function main() {
   const amountToAdd = ether(0.01);
   const ethToAdd = ether(1);
 
-  // await addLiquidityV2(signer, setToken, amountToAdd, ethToAdd);
-  await addLiquidityV3(signer, setToken, amountToAdd, ethToAdd, false);
+  await addLiquidityV2(signer, setToken, amountToAdd, ethToAdd);
+  // await addLiquidityV3(signer, setToken, amountToAdd, ethToAdd, false);
 }
 
 async function addLiquidityV2(
